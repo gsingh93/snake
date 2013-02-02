@@ -77,6 +77,7 @@ public class Main {
 			if (snake.collision(food)) {
 				food.dispose();
 				food = newFood();
+				snake.appendSnakeBody();
 			}
 		}
 	}

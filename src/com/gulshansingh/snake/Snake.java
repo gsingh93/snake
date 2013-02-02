@@ -66,4 +66,26 @@ public class Snake {
 		}
 		return false;
 	}
+
+	public void appendSnakeBody() {
+		SnakeBody last = body.getLast();
+		int x = last.getX();
+		int y = last.getY();
+		switch (direction) {
+		case UP:
+			y += SnakeBody.DIM;
+			break;
+		case DOWN:
+			y -= SnakeBody.DIM;
+			break;
+		case LEFT:
+			x += SnakeBody.DIM;
+			break;
+		case RIGHT:
+			x -= SnakeBody.DIM;
+			break;
+		}
+		SnakeBody next = new SnakeBody(x, y);
+		body.addLast(next);
+	}
 }

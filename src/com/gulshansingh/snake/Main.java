@@ -117,9 +117,7 @@ public class Main {
 			connect(IP);
 			numConnections++;
 		}
-		snake = new Snake(frame);
 
-		SnakeBody food = newFood();
 		incomingReader = new IncomingReader();
 		try {
 			vframe_width = reader.read();
@@ -130,10 +128,13 @@ public class Main {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		snake = new Snake(frame);
+		SnakeBody food = newFood();
+
 		while (true) {
 			new Thread(incomingReader).start();
 			try {
-				Thread.sleep(700);
+				Thread.sleep(200);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

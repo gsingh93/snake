@@ -22,11 +22,10 @@ public class SnakeBody extends JDialog {
 		if (frame == null) {
 			throw new NullPointerException();
 		}
-		setBackground(Color.RED);
 		setUndecorated(true);
 		setSize(DIM, DIM);
 		setAlwaysOnTop(true);
-		setLocation(x, y);
+		mySetLocation(x, y);
 		setVisible(true);
 		getContentPane().setBackground(
 				new Color(r.nextInt(255), r.nextInt(255), r.nextInt(255)));
@@ -36,11 +35,9 @@ public class SnakeBody extends JDialog {
 		SnakeBody.frame = frame;
 	}
 
-	@Override
-	public void setLocation(int x, int y) {
+	public void mySetLocation(int x, int y) {
 		this.x = x;
 		this.y = y;
-		super.setLocation(x, y);
 	}
 
 	@Override

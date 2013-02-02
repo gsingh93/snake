@@ -134,7 +134,7 @@ public class Main {
 		while (true) {
 			new Thread(incomingReader).start();
 			try {
-				Thread.sleep(200);
+				Thread.sleep(500);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -172,16 +172,12 @@ public class Main {
 
 	public void sendToControllerStatus(int state) {
 		try {
-			// System.out.println("X: " + snake.getXCoord());
-			// System.out.println("S_X: " + start_x);
-			// System.out.println("F_W: " + rframe_width);
 			if (snake.getXCoord() >= start_x
 					&& snake.getXCoord() <= start_x + rframe_width)
 				if (snake.getYCoord() >= 0
 						&& snake.getYCoord() <= rframe_height) {
 					writer.write(state);
 					writer.flush();
-					System.out.println("Sent");
 				}
 		} catch (Exception ex) {
 			ex.printStackTrace();

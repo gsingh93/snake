@@ -69,24 +69,15 @@ public class Snake implements Serializable {
 			break;
 		}
 
-		first.setVisible(true);
 		// We know new coordinates of the first square
 		if (y < 0) {
-			first.setVisible(false);
 			y = Main.vframe_height + SnakeBody.DIM;
 		} else if (y > size.height) {
-			first.setVisible(false);
 			y = 0;
 		} else if (x < 0) {
 			x = Main.vframe_width - SnakeBody.DIM;
 		} else if (x > Main.vframe_width) {
 			x = 0;
-		}
-		
-		if (x < Main.start_x) {
-			first.setVisible(false);
-		} else if (x > Main.start_x + Main.rframe_width) {
-			first.setVisible(false);
 		}
 
 		System.out.println(x);
@@ -94,6 +85,17 @@ public class Snake implements Serializable {
 
 		SnakeBody next = new SnakeBody(x, y);
 		body.addFirst(next);
+
+		if (y < 0) {
+			next.setVisible(false);
+		} else if (y > size.height) {
+			next.setVisible(false);
+		}
+		if (x < Main.start_x) {
+			next.setVisible(false);
+		} else if (x > Main.start_x + Main.rframe_width) {
+			next.setVisible(false);
+		}
 
 		SnakeBody last = body.removeLast();
 		last.dispose();

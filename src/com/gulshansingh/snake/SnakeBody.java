@@ -14,6 +14,8 @@ public class SnakeBody extends JDialog {
 	public static final int DIM = 32;
 
 	private int x, y;
+	private static Random r = new Random();
+
 	// TODO Remove ability to focus
 	public SnakeBody(int x, int y) {
 		super(frame);
@@ -26,7 +28,6 @@ public class SnakeBody extends JDialog {
 		setAlwaysOnTop(true);
 		setLocation(x, y);
 		setVisible(true);
-		Random r = new Random();
 		getContentPane().setBackground(
 				new Color(r.nextInt(255), r.nextInt(255), r.nextInt(255)));
 	}

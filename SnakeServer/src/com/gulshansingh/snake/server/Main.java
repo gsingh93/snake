@@ -66,7 +66,7 @@ public class Main {
 			writer.flush();
 
 			writer = writers.get(1);
-			writer.write(dimension2.width);
+			writer.write(dimension1.width);
 			writer.write(dimension2.width);
 			writer.write(dimension2.height);
 			writer.flush();

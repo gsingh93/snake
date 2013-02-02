@@ -26,7 +26,7 @@ public class Snake implements Serializable {
 
 	private Direction direction = Direction.LEFT;
 	private LinkedList<SnakeBody> body = new LinkedList<SnakeBody>();
-
+	private SnakeBody first = body.getFirst();
 	public Snake(JFrame parent) {
 		SnakeBody.setJFrame(parent);
 
@@ -34,7 +34,15 @@ public class Snake implements Serializable {
 			body.add(new SnakeBody(STARTING_X + i * SnakeBody.DIM, STARTING_Y));
 		}
 	}
-
+	
+	public int getXCoord() {
+		return first.getX();
+	}
+	
+	public int getYCoord() {
+		return first.getY();
+	}
+	
 	public void setDirection(Direction dir) {
 		direction = dir;
 	}

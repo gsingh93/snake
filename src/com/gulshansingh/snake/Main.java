@@ -38,9 +38,12 @@ public class Main {
 
 	private JFrame frame;
 	private Snake snake;
-	private ObjectInputStream reader;
-	private ObjectOutputStream writer;
-	
+    private BufferedReader reader;
+    private PrintWriter writer;
+	private int vframe_width, vframe_height, start_x;
+	private int rframe_width, rframe_height;
+	private Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
+	private IncomingReader incomingReader;
 	public static void main(String[] args) {
 		new Main();
 	}
@@ -84,16 +87,16 @@ public class Main {
 			if (e.getID() == KeyEvent.KEY_PRESSED) {
 				switch (e.getKeyCode()) {
 				case KeyEvent.VK_LEFT:
-					snake.setDirection(Direction.LEFT);
+					sendToControllerStatus(e.getKeyCode());
 					break;
 				case KeyEvent.VK_RIGHT:
-					snake.setDirection(Direction.RIGHT);
+					sendToControllerStatus(e.getKeyCode());
 					break;
 				case KeyEvent.VK_UP:
-					snake.setDirection(Direction.UP);
+					sendToControllerStatus(e.getKeyCode());
 					break;
 				case KeyEvent.VK_DOWN:
-					snake.setDirection(Direction.DOWN);
+					sendToControllerStatus(e.getKeyCode());
 					break;
 				}
 			}
@@ -103,14 +106,6 @@ public class Main {
 	}
 
 	private Main() {
-		new Thread (new Runnable() {
-
-			@Override
-			public void run() {
-				listenForConnection();
-			}
-			
-		}).start();
 		createGui();
 		
 		KeyboardFocusManager manager = KeyboardFocusManager
@@ -125,8 +120,9 @@ public class Main {
 		snake = new Snake(frame);
 
 		SnakeBody food = newFood();
-
+		incomingReader = new IncomingReader();
 		while (true) {
+			incomingReader.run();
 			try {
 				Thread.sleep(700);
 			} catch (InterruptedException e) {
@@ -136,13 +132,12 @@ public class Main {
 			if (snake.collision(food)) {
 				food.dispose();
 				food = newFood();
-				snake.appendSnakeBody();
+				sendToControllerStatus(666);
 			}
 		}
 	}
 
 	private SnakeBody newFood() {
-		Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
 		int x = (r.nextInt(size.width) + SnakeBody.DIM / 2) / SnakeBody.DIM
 				* SnakeBody.DIM;
 		int y = (r.nextInt(size.height) + SnakeBody.DIM / 2) / SnakeBody.DIM
@@ -155,42 +150,80 @@ public class Main {
 			Socket sock = new Socket(IP, 35267);
 			InputStreamReader streamReader = new InputStreamReader(
 					sock.getInputStream());
-			reader = new ObjectInputStream(sock.getInputStream());
-			writer = new ObjectOutputStream(sock.getOutputStream()); // I write snake here
+			reader = new BufferedReader(streamReader);
+			writer = new PrintWriter(sock.getOutputStream());
 			System.out.println("Snake network established");
+			sendToControllerInit();
 		} catch (IOException ex) {
 			ex.printStackTrace();
 			System.exit(1);
 		}
 	}
-	
-	private void sendSnake() {
-		// Serialize data object to a file
-		try {
-			writer.writeObject(snake);
-			writer.flush();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	private void receiveSnake() {
-		// Serialize data object to a file
-			try {
-				snake = (Snake) reader.readObject();
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-
-	  public void listenForConnection() {
-          try {
-              ServerSocket serverSock = new ServerSocket(35267);
-                  Socket clientSocket = serverSock.accept();
-                  writer = new ObjectOutputStream(clientSocket.getOutputStream());
-              }
-          catch (Exception ex) { ex.printStackTrace(); }
-      }
+	  
+	public void sendToControllerStatus(int state) {
+		  try {
+			  if(snake.getXCoord() >= start_x && snake.getXCoord() <= start_x + rframe_width)
+				  if(snake.getYCoord() >= 0 && snake.getYCoord() <= rframe_height) {
+					  writer.print(state);
+					  writer.flush();  
+				  }
+		  	}
+	            catch (Exception ex) {
+	                ex.printStackTrace();
+	           }
+	    }
+	  public void sendToControllerInit() {
+		  try {
+			  writer.print(size.width);
+			  writer.print(size.height);
+	          writer.flush();
+		  	}
+	            catch (Exception ex) {
+	                ex.printStackTrace();
+	           }
+		  
+	    }
+	   
+	  
+	  public class IncomingReader implements Runnable {
+		  Boolean v_width_set = false;
+		  Boolean v_height_set = false;
+		  Boolean r_width_set = false;
+		  Boolean r_height_set = false;
+		  Boolean start_x_set = false;
+		  	public void run() {
+		  		int dir = 0;
+		  		Integer dirWrapper = new Integer(dir);
+	            try {
+	                while ((dirWrapper = reader.read()) != null) {
+	                    if (!v_width_set) {vframe_width = dirWrapper; v_width_set=true; continue;}
+	                    if (!v_height_set) {vframe_height = dirWrapper; v_height_set=true; continue;}
+	                    if (!start_x_set) {start_x = dirWrapper; start_x_set=true; continue;}
+	                    if (!r_width_set) {rframe_width = dirWrapper; r_width_set=true; continue;}
+	                    if (!r_height_set) {rframe_height = dirWrapper; r_height_set=true; continue;}
+	                     // Read key presses
+	                    switch (dirWrapper) {
+	    				case KeyEvent.VK_LEFT:
+	    					snake.setDirection((Direction.values()[KeyEvent.VK_LEFT]));
+	    					break;
+	    				case KeyEvent.VK_RIGHT:
+	    					snake.setDirection((Direction.values()[KeyEvent.VK_RIGHT]));
+	    					break;
+	    				case KeyEvent.VK_UP:
+	    					snake.setDirection((Direction.values()[KeyEvent.VK_UP]));
+	    					break;
+	    				case KeyEvent.VK_DOWN:
+	    					snake.setDirection((Direction.values()[KeyEvent.VK_DOWN]));
+	    					break;
+	    				case 666:
+	    					snake.appendSnakeBody();
+	    					break;
+	    				}
+	                }
+	            } catch (IOException ex)
+	            {
+	                ex.printStackTrace();
+	            }
+	        }
+	    }
 }

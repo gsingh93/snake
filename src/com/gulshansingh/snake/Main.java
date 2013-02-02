@@ -10,6 +10,8 @@ import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Random;
@@ -35,8 +37,8 @@ public class Main {
 
 	private JFrame frame;
 	private Snake snake;
-	private BufferedReader reader;
-	private PrintWriter writer;
+	private ObjectInputStream reader;
+	private ObjectOutputStream writer;
 
 	public static void main(String[] args) {
 		new Main();
@@ -144,12 +146,35 @@ public class Main {
 			Socket sock = new Socket(IP, 35267);
 			InputStreamReader streamReader = new InputStreamReader(
 					sock.getInputStream());
-			reader = new BufferedReader(streamReader);
-			writer = new PrintWriter(sock.getOutputStream());
+			reader = new ObjectInputStream(sock.getInputStream());
+			writer = new ObjectOutputStream(sock.getOutputStream());
 			System.out.println("Snake network established");
 		} catch (IOException ex) {
 			ex.printStackTrace();
 			System.exit(1);
 		}
 	}
+	
+	private void sendSnake() {
+		// Serialize data object to a file
+		try {
+			writer.writeObject(snake);
+			writer.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void receiveSnake() {
+		// Serialize data object to a file
+			try {
+				snake = (Snake) reader.readObject();
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	
+	
 }

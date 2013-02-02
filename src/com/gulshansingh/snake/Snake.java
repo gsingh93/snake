@@ -2,6 +2,7 @@ package com.gulshansingh.snake;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.io.Serializable;
 import java.util.LinkedList;
 
 import javax.swing.JFrame;
@@ -12,7 +13,9 @@ import javax.swing.JFrame;
  * @author Gulshan Singh
  * 
  */
-public class Snake {
+public class Snake implements Serializable {
+
+	private static final long serialVersionUID = 7162978852128270222L;
 
 	public enum Direction {
 		UP, DOWN, RIGHT, LEFT
@@ -27,7 +30,7 @@ public class Snake {
 	public Snake(JFrame parent) {
 		SnakeBody.setJFrame(parent);
 
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < 10; i++) {
 			body.add(new SnakeBody(STARTING_X + i * SnakeBody.DIM, STARTING_Y));
 		}
 	}

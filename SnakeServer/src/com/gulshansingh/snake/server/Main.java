@@ -48,6 +48,8 @@ public class Main {
 				}
 			}
 
+			// TODO
+			Thread.sleep(1000);
 			Dimension dimension1 = handlers.get(0).getDimension();
 			Dimension dimension2 = handlers.get(1).getDimension();
 
@@ -71,6 +73,8 @@ public class Main {
 
 		} catch (IOException e) {
 			e.printStackTrace();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -93,20 +97,20 @@ public class Main {
 
 		@Override
 		public void run() {
-			String message;
+			int message;
 			boolean sizeReceived = false;
 			try {
-				while ((message = reader.readLine()) != null) {
-					System.out.println(message);
+				while ((message = reader.read()) != -1) {
+					System.out.println("Message: " + message);
 					if (!sizeReceived) {
-						int width = Integer.valueOf(message);
-						int height = Integer.valueOf(reader.readLine());
+						int width = message;
+						int height = reader.read();
 						dimension = new Dimension(width, height);
 						System.out.println(dimension);
 						sizeReceived = true;
 					} else {
 						// Key presses
-						int key = Integer.valueOf(message);
+						int key = message;
 						switch (key) {
 						case KeyEvent.VK_LEFT:
 							tellAll(Direction.LEFT.ordinal());

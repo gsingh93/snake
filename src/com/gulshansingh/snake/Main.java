@@ -84,7 +84,6 @@ public class Main {
 	private class KeyDispatcher implements KeyEventDispatcher {
 		public boolean dispatchKeyEvent(KeyEvent e) {
 			if (e.getID() == KeyEvent.KEY_PRESSED) {
-				System.out.println(e.getKeyCode());
 				switch (e.getKeyCode()) {
 				case KeyEvent.VK_LEFT:
 					sendToControllerStatus(e.getKeyCode());
@@ -123,7 +122,7 @@ public class Main {
 		SnakeBody food = newFood();
 		incomingReader = new IncomingReader();
 		while (true) {
-			new Thread(incomingReader).start();
+			incomingReader.run();
 			try {
 				Thread.sleep(700);
 			} catch (InterruptedException e) {
@@ -163,9 +162,9 @@ public class Main {
 
 	public void sendToControllerStatus(int state) {
 		try {
-			System.out.println(snake.getXCoord());
-			System.out.println(start_x);
-			System.out.println(rframe_width);
+			System.out.println("X: " + snake.getXCoord());
+			System.out.println("S_X: " + start_x);
+			System.out.println("F_W: " + rframe_width);
 			if (snake.getXCoord() >= start_x
 					&& snake.getXCoord() <= start_x + rframe_width)
 				if (snake.getYCoord() >= 0
@@ -202,6 +201,7 @@ public class Main {
 			Integer dirWrapper = new Integer(dir);
 			try {
 				while ((dirWrapper = reader.read()) != null) {
+					System.out.println(dirWrapper);
 					if (!v_width_set) {
 						vframe_width = dirWrapper;
 						v_width_set = true;

@@ -50,7 +50,6 @@ public class Main {
 	public void createGui() {
 		frame = new JFrame("Snake");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
 		@SuppressWarnings("unused")
 		JWindow window = new JWindow(frame);
 

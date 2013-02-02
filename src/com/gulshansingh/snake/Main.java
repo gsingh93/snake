@@ -13,6 +13,7 @@ import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Random;
 
@@ -39,7 +40,7 @@ public class Main {
 	private Snake snake;
 	private ObjectInputStream reader;
 	private ObjectOutputStream writer;
-
+	
 	public static void main(String[] args) {
 		new Main();
 	}
@@ -102,8 +103,16 @@ public class Main {
 	}
 
 	private Main() {
-		createGui();
+		new Thread (new Runnable() {
 
+			@Override
+			public void run() {
+				listenForConnection();
+			}
+			
+		}).start();
+		createGui();
+		
 		KeyboardFocusManager manager = KeyboardFocusManager
 				.getCurrentKeyboardFocusManager();
 		manager.addKeyEventDispatcher(new KeyDispatcher());
@@ -147,7 +156,7 @@ public class Main {
 			InputStreamReader streamReader = new InputStreamReader(
 					sock.getInputStream());
 			reader = new ObjectInputStream(sock.getInputStream());
-			writer = new ObjectOutputStream(sock.getOutputStream());
+			writer = new ObjectOutputStream(sock.getOutputStream()); // I write snake here
 			System.out.println("Snake network established");
 		} catch (IOException ex) {
 			ex.printStackTrace();
@@ -175,6 +184,13 @@ public class Main {
 				e.printStackTrace();
 			}
 		}
-	
-	
+
+	  public void listenForConnection() {
+          try {
+              ServerSocket serverSock = new ServerSocket(35267);
+                  Socket clientSocket = serverSock.accept();
+                  writer = new ObjectOutputStream(clientSocket.getOutputStream());
+              }
+          catch (Exception ex) { ex.printStackTrace(); }
+      }
 }

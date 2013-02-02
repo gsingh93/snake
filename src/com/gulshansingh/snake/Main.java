@@ -149,6 +149,7 @@ public class Main {
 			System.out.println("Snake network established");
 		} catch (IOException ex) {
 			ex.printStackTrace();
+			System.exit(1);
 		}
 	}
 }

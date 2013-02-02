@@ -38,8 +38,8 @@ public class Main {
 	private Snake snake;
 	private BufferedReader reader;
 	private PrintWriter writer;
-	private int vframe_width, vframe_height, start_x;
-	private int rframe_width, rframe_height;
+	public static int vframe_width, vframe_height, start_x;
+	public static int rframe_width, rframe_height;
 	private Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
 	private IncomingReader incomingReader;
 
@@ -171,9 +171,9 @@ public class Main {
 
 	public void sendToControllerStatus(int state) {
 		try {
-			System.out.println("X: " + snake.getXCoord());
-			System.out.println("S_X: " + start_x);
-			System.out.println("F_W: " + rframe_width);
+			// System.out.println("X: " + snake.getXCoord());
+			// System.out.println("S_X: " + start_x);
+			// System.out.println("F_W: " + rframe_width);
 			if (snake.getXCoord() >= start_x
 					&& snake.getXCoord() <= start_x + rframe_width)
 				if (snake.getYCoord() >= 0

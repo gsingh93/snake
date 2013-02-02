@@ -68,12 +68,30 @@ public class Snake implements Serializable {
 			x += SnakeBody.DIM;
 			break;
 		}
+
+		first.setVisible(true);
 		// We know new coordinates of the first square
-		if (y < 0) y = size.height + SnakeBody.DIM;
-		else if (y > size.height) y = 0;
-		if (x < 0) x = size.width - SnakeBody.DIM;
-		else if (x > size.width) x = 0;
+		if (y < 0) {
+			first.setVisible(false);
+			y = Main.vframe_height + SnakeBody.DIM;
+		} else if (y > size.height) {
+			first.setVisible(false);
+			y = 0;
+		} else if (x < 0) {
+			x = Main.vframe_width - SnakeBody.DIM;
+		} else if (x > Main.vframe_width) {
+			x = 0;
+		}
 		
+		if (x < Main.start_x) {
+			first.setVisible(false);
+		} else if (x > Main.start_x + Main.rframe_width) {
+			first.setVisible(false);
+		}
+
+		System.out.println(x);
+		System.out.println(y);
+
 		SnakeBody next = new SnakeBody(x, y);
 		body.addFirst(next);
 

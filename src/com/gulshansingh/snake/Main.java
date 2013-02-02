@@ -133,7 +133,7 @@ public class Main {
 		while (true) {
 			new Thread(incomingReader).start();
 			try {
-				Thread.sleep(200);
+				Thread.sleep(500);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

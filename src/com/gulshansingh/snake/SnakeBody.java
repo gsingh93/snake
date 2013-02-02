@@ -25,7 +25,13 @@ public class SnakeBody extends JDialog {
 		setUndecorated(true);
 		setSize(DIM, DIM);
 		setAlwaysOnTop(true);
+		init(x, y);
+	}
+
+	public void init(int x, int y) {
 		mySetLocation(x, y);
+		setVisible(true);
+		setFocusable(false);
 		getContentPane().setBackground(
 				new Color(r.nextInt(255), r.nextInt(255), r.nextInt(255)));
 		setVisible(true);

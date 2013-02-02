@@ -36,8 +36,8 @@ public class Main {
 	private JFrame frame;
 	private Snake snake;
 	private BufferedReader reader;
-    private PrintWriter writer;
-    
+	private PrintWriter writer;
+
 	public static void main(String[] args) {
 		new Main();
 	}
@@ -50,7 +50,7 @@ public class Main {
 		JWindow window = new JWindow(frame);
 
 		JLabel IPLabel = new JLabel("IP: ");
-		JTextField IPField = new JTextField();
+		final JTextField IPField = new JTextField();
 		IPField.setColumns(15);
 		JButton startButton = new JButton("Start");
 
@@ -60,7 +60,7 @@ public class Main {
 				new Thread(new Runnable() {
 					@Override
 					public void run() {
-						start();
+						start(IPField.getText());
 					}
 				}).start();
 			}
@@ -107,7 +107,10 @@ public class Main {
 		manager.addKeyEventDispatcher(new KeyDispatcher());
 	}
 
-	private void start() {
+	private void start(String IP) {
+		if (IP != null && !IP.equals("")) {
+			connect(IP);
+		}
 		snake = new Snake(frame);
 
 		SnakeBody food = newFood();
@@ -136,11 +139,11 @@ public class Main {
 		return new SnakeBody(x, y);
 	}
 
-	private void createSocket(String ip_address) {
+	private void connect(String IP) {
 		try {
-			Socket sock;
-			sock = new Socket(ip_address, 35267);
-			InputStreamReader streamReader = new InputStreamReader(sock.getInputStream());
+			Socket sock = new Socket(IP, 35267);
+			InputStreamReader streamReader = new InputStreamReader(
+					sock.getInputStream());
 			reader = new BufferedReader(streamReader);
 			writer = new PrintWriter(sock.getOutputStream());
 			System.out.println("Snake network established");

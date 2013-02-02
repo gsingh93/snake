@@ -4,10 +4,16 @@ import java.awt.Dimension;
 import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.Random;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.JWindow;
 
 import com.gulshansingh.snake.Snake.Direction;
@@ -20,11 +26,47 @@ import com.gulshansingh.snake.Snake.Direction;
  */
 public class Main {
 
-	private Snake snake;
 	private static final Random r = new Random();
+
+	private JFrame frame;
+	private Snake snake;
 
 	public static void main(String[] args) {
 		new Main();
+	}
+
+	public void createGui() {
+		frame = new JFrame("Snake");
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		@SuppressWarnings("unused")
+		JWindow window = new JWindow(frame);
+
+		JLabel IPLabel = new JLabel("IP: ");
+		JTextField IPField = new JTextField();
+		IPField.setColumns(15);
+		JButton startButton = new JButton("Start");
+
+		startButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new Thread(new Runnable() {
+					@Override
+					public void run() {
+						start();
+					}
+				}).start();
+			}
+		});
+
+		JPanel panel = new JPanel();
+		panel.add(IPLabel);
+		panel.add(IPField);
+		panel.add(startButton);
+
+		frame.getContentPane().add(panel);
+		frame.pack();
+		frame.setVisible(true);
 	}
 
 	private class KeyDispatcher implements KeyEventDispatcher {
@@ -51,18 +93,14 @@ public class Main {
 	}
 
 	private Main() {
+		createGui();
+
 		KeyboardFocusManager manager = KeyboardFocusManager
 				.getCurrentKeyboardFocusManager();
 		manager.addKeyEventDispatcher(new KeyDispatcher());
+	}
 
-		JFrame frame = new JFrame("Snake");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setVisible(true);
-		frame.setSize(100, 100);
-
-		@SuppressWarnings("unused")
-		JWindow window = new JWindow(frame);
-
+	private void start() {
 		snake = new Snake(frame);
 
 		SnakeBody food = newFood();

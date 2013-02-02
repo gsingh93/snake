@@ -21,8 +21,18 @@ public class Main {
 		frame.setVisible(true);
 		frame.setSize(100, 100);
 
+		@SuppressWarnings("unused")
 		JWindow window = new JWindow(frame);
 
 		Snake snake = new Snake(frame);
+
+		while (true) {
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			snake.update();
+		}
 	}
 }

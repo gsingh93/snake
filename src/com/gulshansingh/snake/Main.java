@@ -7,6 +7,11 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
 import java.util.Random;
 
 import javax.swing.JButton;
@@ -30,7 +35,9 @@ public class Main {
 
 	private JFrame frame;
 	private Snake snake;
-
+	private BufferedReader reader;
+    private PrintWriter writer;
+    
 	public static void main(String[] args) {
 		new Main();
 	}
@@ -127,5 +134,18 @@ public class Main {
 		int y = (r.nextInt(size.height) + SnakeBody.DIM / 2) / SnakeBody.DIM
 				* SnakeBody.DIM;
 		return new SnakeBody(x, y);
+	}
+
+	private void createSocket(String ip_address) {
+		try {
+			Socket sock;
+			sock = new Socket(ip_address, 35267);
+			InputStreamReader streamReader = new InputStreamReader(sock.getInputStream());
+			reader = new BufferedReader(streamReader);
+			writer = new PrintWriter(sock.getOutputStream());
+			System.out.println("Snake network established");
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
 	}
 }

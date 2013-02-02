@@ -151,7 +151,9 @@ public class Main {
 				* SnakeBody.DIM;
 		int y = (r.nextInt(size.height) + SnakeBody.DIM / 2) / SnakeBody.DIM
 				* SnakeBody.DIM;
-		return new SnakeBody(x, y);
+		SnakeBody food = new SnakeBody(x, y);
+		food.setLocation(x, y);
+		return food;
 	}
 
 	private void connect(String IP) {

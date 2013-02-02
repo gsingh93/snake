@@ -16,8 +16,8 @@ public class Snake {
 		UP, DOWN, RIGHT, LEFT
 	}
 
-	public static final int STARTING_X = 600;
-	public static final int STARTING_Y = 400;
+	public static final int STARTING_X = 640;
+	public static final int STARTING_Y = 480;
 
 	private Direction direction = Direction.LEFT;
 	private LinkedList<SnakeBody> body = new LinkedList<SnakeBody>();
@@ -57,5 +57,13 @@ public class Snake {
 
 		SnakeBody last = body.removeLast();
 		last.dispose();
+	}
+
+	public boolean collision(SnakeBody food) {
+		SnakeBody first = body.getFirst();
+		if (first.getX() == food.getX() && first.getY() == food.getY()) {
+			return true;
+		}
+		return false;
 	}
 }

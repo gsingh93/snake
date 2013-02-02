@@ -1,8 +1,11 @@
 package com.gulshansingh.snake;
 
+import java.awt.Dimension;
 import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
+import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
+import java.util.Random;
 
 import javax.swing.JFrame;
 import javax.swing.JWindow;
@@ -18,6 +21,7 @@ import com.gulshansingh.snake.Snake.Direction;
 public class Main {
 
 	private Snake snake;
+	private static final Random r = new Random();
 
 	public static void main(String[] args) {
 		new Main();
@@ -61,6 +65,8 @@ public class Main {
 
 		snake = new Snake(frame);
 
+		SnakeBody food = newFood();
+
 		while (true) {
 			try {
 				Thread.sleep(700);
@@ -68,6 +74,19 @@ public class Main {
 				e.printStackTrace();
 			}
 			snake.update();
+			if (snake.collision(food)) {
+				food.dispose();
+				food = newFood();
+			}
 		}
+	}
+
+	private SnakeBody newFood() {
+		Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
+		int x = (r.nextInt(size.width) + SnakeBody.DIM / 2) / SnakeBody.DIM
+				* SnakeBody.DIM;
+		int y = (r.nextInt(size.height) + SnakeBody.DIM / 2) / SnakeBody.DIM
+				* SnakeBody.DIM;
+		return new SnakeBody(x, y);
 	}
 }

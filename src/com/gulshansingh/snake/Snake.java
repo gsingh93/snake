@@ -32,6 +32,12 @@ public class Snake implements Serializable {
 
 		for (int i = 0; i < 10; i++) {
 			body.add(new SnakeBody(STARTING_X + i * SnakeBody.DIM, STARTING_Y));
+			if (STARTING_X + i * SnakeBody.DIM < Main.start_x) {
+				body.get(i).setVisible(false);
+			} else if (STARTING_X + i * SnakeBody.DIM > Main.start_x
+					+ Main.rframe_width) {
+				body.get(i).setVisible(false);
+			}
 		}
 
 		first = body.getFirst();

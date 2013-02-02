@@ -1,5 +1,7 @@
 package com.gulshansingh.snake;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.util.LinkedList;
 
 import javax.swing.JFrame;
@@ -35,6 +37,7 @@ public class Snake {
 	}
 
 	public void update() {
+		Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
 		SnakeBody first = body.getFirst();
 		int x = first.getX();
 		int y = first.getY();
@@ -52,6 +55,12 @@ public class Snake {
 			x += SnakeBody.DIM;
 			break;
 		}
+		// We know new coordinates of the first square
+		if (y < 0) y = size.height + SnakeBody.DIM;
+		else if (y > size.height) y = 0;
+		if (x < 0) x = size.width - SnakeBody.DIM;
+		else if (x > size.width) x = 0;
+		
 		SnakeBody next = new SnakeBody(x, y);
 		body.addFirst(next);
 

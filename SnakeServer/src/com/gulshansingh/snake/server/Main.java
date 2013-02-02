@@ -54,7 +54,9 @@ public class Main {
 			Dimension dimension2 = handlers.get(1).getDimension();
 
 			int width = dimension1.width + dimension2.width;
+			width = (width + 32 / 2) / 32 * 32;
 			int height = Math.max(dimension1.height, dimension2.height);
+			height = (height + 32 / 2) / 32 * 32;
 			tellAll(width);
 			tellAll(height);
 
@@ -101,7 +103,6 @@ public class Main {
 			boolean sizeReceived = false;
 			try {
 				while ((message = reader.read()) != -1) {
-					System.out.println("Message: " + message);
 					if (!sizeReceived) {
 						int width = message;
 						int height = reader.read();
@@ -110,7 +111,6 @@ public class Main {
 					} else {
 						// Key presses
 						int key = message;
-						System.out.println(key);
 						switch (key) {
 						case KeyEvent.VK_LEFT:
 							tellAll(Direction.LEFT.ordinal());

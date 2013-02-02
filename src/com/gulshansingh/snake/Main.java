@@ -32,6 +32,7 @@ import com.gulshansingh.snake.Snake.Direction;
 public class Main {
 
 	private static final Random r = new Random();
+	private static int numConnections = 0;
 
 	private JFrame frame;
 	private Snake snake;
@@ -110,6 +111,7 @@ public class Main {
 	private void start(String IP) {
 		if (IP != null && !IP.equals("")) {
 			connect(IP);
+			numConnections++;
 		}
 		snake = new Snake(frame);
 

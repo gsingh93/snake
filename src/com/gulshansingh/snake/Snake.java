@@ -12,7 +12,7 @@ import javax.swing.JFrame;
  */
 public class Snake {
 
-	private enum Direction {
+	public enum Direction {
 		UP, DOWN, RIGHT, LEFT
 	}
 
@@ -30,6 +30,10 @@ public class Snake {
 		}
 	}
 
+	public void setDirection(Direction dir) {
+		direction = dir;
+	}
+
 	public void update() {
 		SnakeBody first = body.getFirst();
 		int x = first.getX();
@@ -45,7 +49,7 @@ public class Snake {
 			x -= SnakeBody.DIM;
 			break;
 		case RIGHT:
-			y += SnakeBody.DIM;
+			x += SnakeBody.DIM;
 			break;
 		}
 		SnakeBody next = new SnakeBody(x, y);

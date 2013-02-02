@@ -121,8 +121,17 @@ public class Main {
 
 		SnakeBody food = newFood();
 		incomingReader = new IncomingReader();
+		try {
+			vframe_width = reader.read();
+			vframe_height = reader.read();
+			start_x = reader.read();
+			rframe_width = reader.read();
+			rframe_height = reader.read();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		while (true) {
-			incomingReader.run();
+			new Thread(incomingReader).start();
 			try {
 				Thread.sleep(700);
 			} catch (InterruptedException e) {
@@ -190,58 +199,28 @@ public class Main {
 	}
 
 	public class IncomingReader implements Runnable {
-		Boolean v_width_set = false;
-		Boolean v_height_set = false;
-		Boolean r_width_set = false;
-		Boolean r_height_set = false;
-		Boolean start_x_set = false;
 
 		public void run() {
 			int dir = 0;
-			Integer dirWrapper = new Integer(dir);
 			try {
-				while ((dirWrapper = reader.read()) != null) {
-					System.out.println(dirWrapper);
-					if (!v_width_set) {
-						vframe_width = dirWrapper;
-						v_width_set = true;
-						continue;
-					}
-					if (!v_height_set) {
-						vframe_height = dirWrapper;
-						v_height_set = true;
-						continue;
-					}
-					if (!start_x_set) {
-						start_x = dirWrapper;
-						start_x_set = true;
-						continue;
-					}
-					if (!r_width_set) {
-						rframe_width = dirWrapper;
-						r_width_set = true;
-						continue;
-					}
-					if (!r_height_set) {
-						rframe_height = dirWrapper;
-						r_height_set = true;
-						continue;
-					}
+				while ((dir = reader.read()) != -1) {
+					System.out.println(dir);
+					Direction direction = Direction.values()[dir];
 					// Read key presses
-					switch (dirWrapper) {
-					case KeyEvent.VK_LEFT:
-						snake.setDirection((Direction.values()[KeyEvent.VK_LEFT]));
+					switch (direction) {
+					case LEFT:
+						snake.setDirection(Direction.LEFT);
 						break;
-					case KeyEvent.VK_RIGHT:
-						snake.setDirection((Direction.values()[KeyEvent.VK_RIGHT]));
+					case RIGHT:
+						snake.setDirection(Direction.RIGHT);
 						break;
-					case KeyEvent.VK_UP:
-						snake.setDirection((Direction.values()[KeyEvent.VK_UP]));
+					case UP:
+						snake.setDirection(Direction.UP);
 						break;
-					case KeyEvent.VK_DOWN:
-						snake.setDirection((Direction.values()[KeyEvent.VK_DOWN]));
+					case DOWN:
+						snake.setDirection(Direction.DOWN);
 						break;
-					case 666:
+					case EAT:
 						snake.appendSnakeBody();
 						break;
 					}

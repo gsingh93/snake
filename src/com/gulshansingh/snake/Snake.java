@@ -18,7 +18,7 @@ public class Snake implements Serializable {
 	private static final long serialVersionUID = 7162978852128270222L;
 
 	public enum Direction {
-		UP, DOWN, RIGHT, LEFT
+		UP, DOWN, RIGHT, LEFT, EAT
 	}
 
 	public static final int STARTING_X = 640;

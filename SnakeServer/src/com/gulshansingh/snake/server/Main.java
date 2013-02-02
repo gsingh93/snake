@@ -18,7 +18,7 @@ public class Main {
 	private int connections = 0;
 
 	public enum Direction {
-		UP, DOWN, RIGHT, LEFT
+		UP, DOWN, RIGHT, LEFT, EAT
 	}
 
 	public static void main(String[] args) {
@@ -106,11 +106,11 @@ public class Main {
 						int width = message;
 						int height = reader.read();
 						dimension = new Dimension(width, height);
-						System.out.println(dimension);
 						sizeReceived = true;
 					} else {
 						// Key presses
 						int key = message;
+						System.out.println(key);
 						switch (key) {
 						case KeyEvent.VK_LEFT:
 							tellAll(Direction.LEFT.ordinal());
@@ -125,7 +125,7 @@ public class Main {
 							tellAll(Direction.DOWN.ordinal());
 							break;
 						case 666:
-							tellAll(666);
+							tellAll(Direction.EAT.ordinal());
 						}
 					}
 				}

@@ -26,13 +26,15 @@ public class Snake implements Serializable {
 
 	private Direction direction = Direction.LEFT;
 	private LinkedList<SnakeBody> body = new LinkedList<SnakeBody>();
-	private SnakeBody first = body.getFirst();
+	private SnakeBody first;
 	public Snake(JFrame parent) {
 		SnakeBody.setJFrame(parent);
 
 		for (int i = 0; i < 10; i++) {
 			body.add(new SnakeBody(STARTING_X + i * SnakeBody.DIM, STARTING_Y));
 		}
+
+		first = body.getFirst();
 	}
 	
 	public int getXCoord() {

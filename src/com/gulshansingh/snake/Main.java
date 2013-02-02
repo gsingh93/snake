@@ -10,10 +10,7 @@ import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Random;
 
@@ -39,12 +36,13 @@ public class Main {
 
 	private JFrame frame;
 	private Snake snake;
-    private BufferedReader reader;
-    private PrintWriter writer;
+	private BufferedReader reader;
+	private PrintWriter writer;
 	private int vframe_width, vframe_height, start_x;
 	private int rframe_width, rframe_height;
 	private Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
 	private IncomingReader incomingReader;
+
 	public static void main(String[] args) {
 		new Main();
 	}
@@ -86,6 +84,7 @@ public class Main {
 	private class KeyDispatcher implements KeyEventDispatcher {
 		public boolean dispatchKeyEvent(KeyEvent e) {
 			if (e.getID() == KeyEvent.KEY_PRESSED) {
+				System.out.println(e.getKeyCode());
 				switch (e.getKeyCode()) {
 				case KeyEvent.VK_LEFT:
 					sendToControllerStatus(e.getKeyCode());
@@ -108,7 +107,7 @@ public class Main {
 
 	private Main() {
 		createGui();
-		
+
 		KeyboardFocusManager manager = KeyboardFocusManager
 				.getCurrentKeyboardFocusManager();
 		manager.addKeyEventDispatcher(new KeyDispatcher());
@@ -124,7 +123,7 @@ public class Main {
 		SnakeBody food = newFood();
 		incomingReader = new IncomingReader();
 		while (true) {
-			incomingReader.run();
+			new Thread(incomingReader).start();
 			try {
 				Thread.sleep(700);
 			} catch (InterruptedException e) {
@@ -161,71 +160,95 @@ public class Main {
 			System.exit(1);
 		}
 	}
-	  
+
 	public void sendToControllerStatus(int state) {
-		  try {
-			  if(snake.getXCoord() >= start_x && snake.getXCoord() <= start_x + rframe_width)
-				  if(snake.getYCoord() >= 0 && snake.getYCoord() <= rframe_height) {
-					  writer.print(state);
-					  writer.flush();  
-				  }
-		  	}
-	            catch (Exception ex) {
-	                ex.printStackTrace();
-	           }
-	    }
-	  public void sendToControllerInit() {
-		  try {
-			  writer.print(size.width);
-			  writer.print(size.height);
-	          writer.flush();
-		  	}
-	            catch (Exception ex) {
-	                ex.printStackTrace();
-	           }
-		  
-	    }
-	   
-	  
-	  public class IncomingReader implements Runnable {
-		  Boolean v_width_set = false;
-		  Boolean v_height_set = false;
-		  Boolean r_width_set = false;
-		  Boolean r_height_set = false;
-		  Boolean start_x_set = false;
-		  	public void run() {
-		  		int dir = 0;
-		  		Integer dirWrapper = new Integer(dir);
-	            try {
-	                while ((dirWrapper = reader.read()) != null) {
-	                    if (!v_width_set) {vframe_width = dirWrapper; v_width_set=true; continue;}
-	                    if (!v_height_set) {vframe_height = dirWrapper; v_height_set=true; continue;}
-	                    if (!start_x_set) {start_x = dirWrapper; start_x_set=true; continue;}
-	                    if (!r_width_set) {rframe_width = dirWrapper; r_width_set=true; continue;}
-	                    if (!r_height_set) {rframe_height = dirWrapper; r_height_set=true; continue;}
-	                     // Read key presses
-	                    switch (dirWrapper) {
-	    				case KeyEvent.VK_LEFT:
-	    					snake.setDirection((Direction.values()[KeyEvent.VK_LEFT]));
-	    					break;
-	    				case KeyEvent.VK_RIGHT:
-	    					snake.setDirection((Direction.values()[KeyEvent.VK_RIGHT]));
-	    					break;
-	    				case KeyEvent.VK_UP:
-	    					snake.setDirection((Direction.values()[KeyEvent.VK_UP]));
-	    					break;
-	    				case KeyEvent.VK_DOWN:
-	    					snake.setDirection((Direction.values()[KeyEvent.VK_DOWN]));
-	    					break;
-	    				case 666:
-	    					snake.appendSnakeBody();
-	    					break;
-	    				}
-	                }
-	            } catch (IOException ex)
-	            {
-	                ex.printStackTrace();
-	            }
-	        }
-	    }
+		try {
+			System.out.println(snake.getXCoord());
+			System.out.println(start_x);
+			System.out.println(rframe_width);
+			if (snake.getXCoord() >= start_x
+					&& snake.getXCoord() <= start_x + rframe_width)
+				if (snake.getYCoord() >= 0
+						&& snake.getYCoord() <= rframe_height) {
+					writer.write(state);
+					writer.flush();
+					System.out.println("Sent");
+				}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+
+	public void sendToControllerInit() {
+		try {
+			writer.write(size.width);
+			writer.write(size.height);
+			writer.flush();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+	}
+
+	public class IncomingReader implements Runnable {
+		Boolean v_width_set = false;
+		Boolean v_height_set = false;
+		Boolean r_width_set = false;
+		Boolean r_height_set = false;
+		Boolean start_x_set = false;
+
+		public void run() {
+			int dir = 0;
+			Integer dirWrapper = new Integer(dir);
+			try {
+				while ((dirWrapper = reader.read()) != null) {
+					if (!v_width_set) {
+						vframe_width = dirWrapper;
+						v_width_set = true;
+						continue;
+					}
+					if (!v_height_set) {
+						vframe_height = dirWrapper;
+						v_height_set = true;
+						continue;
+					}
+					if (!start_x_set) {
+						start_x = dirWrapper;
+						start_x_set = true;
+						continue;
+					}
+					if (!r_width_set) {
+						rframe_width = dirWrapper;
+						r_width_set = true;
+						continue;
+					}
+					if (!r_height_set) {
+						rframe_height = dirWrapper;
+						r_height_set = true;
+						continue;
+					}
+					// Read key presses
+					switch (dirWrapper) {
+					case KeyEvent.VK_LEFT:
+						snake.setDirection((Direction.values()[KeyEvent.VK_LEFT]));
+						break;
+					case KeyEvent.VK_RIGHT:
+						snake.setDirection((Direction.values()[KeyEvent.VK_RIGHT]));
+						break;
+					case KeyEvent.VK_UP:
+						snake.setDirection((Direction.values()[KeyEvent.VK_UP]));
+						break;
+					case KeyEvent.VK_DOWN:
+						snake.setDirection((Direction.values()[KeyEvent.VK_DOWN]));
+						break;
+					case 666:
+						snake.appendSnakeBody();
+						break;
+					}
+				}
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
+		}
+	}
 }

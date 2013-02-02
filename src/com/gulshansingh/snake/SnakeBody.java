@@ -8,13 +8,16 @@ public class SnakeBody extends JDialog {
 
 	private static JFrame frame;
 
+	public static final int DIM = 32;
+
+	// TODO Remove ability to focus
 	public SnakeBody(int x, int y) {
 		super(frame);
 		if (frame == null) {
 			throw new NullPointerException();
 		}
 		setUndecorated(true);
-		setSize(32, 32);
+		setSize(DIM, DIM);
 		setAlwaysOnTop(true);
 		setLocation(x, y);
 		setVisible(true);

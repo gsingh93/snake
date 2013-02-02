@@ -18,7 +18,9 @@ public class Snake {
 
 	public Snake(JFrame parent) {
 		SnakeBody.setJFrame(parent);
-		body.add(new SnakeBody(STARTING_X, STARTING_Y));
-		body.add(new SnakeBody(STARTING_X + 50, STARTING_Y + 50));
+
+		for (int i = 0; i < 4; i++) {
+			body.add(new SnakeBody(STARTING_X + i * SnakeBody.DIM, STARTING_Y));
+		}
 	}
 }

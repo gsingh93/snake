@@ -19,6 +19,7 @@ public class Main {
 		JFrame frame = new JFrame("Snake");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
+		frame.setSize(100, 100);
 
 		JWindow window = new JWindow(frame);
 

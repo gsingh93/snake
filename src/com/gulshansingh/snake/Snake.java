@@ -129,7 +129,8 @@ public class Snake implements Serializable {
 
 	public boolean collision(SnakeBody food) {
 		SnakeBody first = body.getFirst();
-		if (first.getX() == food.getX() && first.getY() == food.getY()) {
+		if (first.getX() - Main.start_x == food.getX()
+				&& first.getY() == food.getY()) {
 			return true;
 		}
 		return false;

@@ -43,7 +43,7 @@ public class Main {
 	private Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
 	private IncomingReader incomingReader;
 
-	private int delay = 400;
+	private int delay = 420;
 
 	public static void main(String[] args) {
 		new Main();
@@ -220,7 +220,7 @@ public class Main {
 						break;
 					case EAT:
 						snake.appendSnakeBody();
-						if (delay > 200) {
+						if (delay > 360) {
 							delay -= 20;
 						}
 						break;

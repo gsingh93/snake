@@ -22,7 +22,6 @@ import javax.swing.JTextField;
 import javax.swing.JWindow;
 
 import com.gulshansingh.snake.Snake.Direction;
-import com.gulshansingh.snake.SnakeBody;
 
 /**
  * Application entry point
@@ -125,6 +124,9 @@ public class Main {
 			start_x = reader.read();
 			rframe_width = reader.read();
 			rframe_height = reader.read();
+			int food_x = reader.read();
+			int food_y = reader.read();
+			Main.makeNewFood(food_x, food_y);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

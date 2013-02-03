@@ -22,6 +22,7 @@ import javax.swing.JTextField;
 import javax.swing.JWindow;
 
 import com.gulshansingh.snake.Snake.Direction;
+import com.gulshansingh.snake.SnakeBody;
 
 /**
  * Application entry point
@@ -42,7 +43,7 @@ public class Main {
 	public static int rframe_width, rframe_height;
 	private Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
 	private IncomingReader incomingReader;
-
+	private static SnakeBody food;
 	public static void main(String[] args) {
 		new Main();
 	}
@@ -128,7 +129,6 @@ public class Main {
 			e.printStackTrace();
 		}
 		snake = new Snake(frame);
-		SnakeBody food = newFood();
 
 		while (true) {
 			new Thread(incomingReader).start();
@@ -140,20 +140,9 @@ public class Main {
 			snake.update();
 			if (snake.collision(food)) {
 				food.dispose();
-				food = newFood();
 				sendToControllerStatus(666);
 			}
 		}
-	}
-
-	private SnakeBody newFood() {
-		int x = (r.nextInt(size.width) + SnakeBody.DIM / 2) / SnakeBody.DIM
-				* SnakeBody.DIM;
-		int y = (r.nextInt(size.height) + SnakeBody.DIM / 2) / SnakeBody.DIM
-				* SnakeBody.DIM;
-		SnakeBody food = new SnakeBody(x, y);
-		food.setLocation(x, y);
-		return food;
 	}
 
 	private void connect(String IP) {
@@ -169,6 +158,11 @@ public class Main {
 			ex.printStackTrace();
 			System.exit(1);
 		}
+	}
+	
+	public static void makeNewFood(int food_x, int food_y) {
+		food = new SnakeBody(food_x, food_y);
+		food.setLocation(food_x, food_y);
 	}
 
 	public void sendToControllerStatus(int state) {
@@ -189,6 +183,7 @@ public class Main {
 		try {
 			writer.write(size.width);
 			writer.write(size.height);
+			writer.write(Direction.EAT.ordinal());
 			writer.flush();
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -219,6 +214,9 @@ public class Main {
 						break;
 					case EAT:
 						snake.appendSnakeBody();
+						int food_x = reader.read();
+						int food_y = reader.read();
+						Main.makeNewFood(food_x, food_y);
 						break;
 					}
 				}

@@ -9,14 +9,18 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Random;
+
 
 public class Main {
 
 	private ArrayList<PrintWriter> writers = new ArrayList<PrintWriter>();
 	private ArrayList<ClientHandler> handlers = new ArrayList<ClientHandler>();
-
+	private static Random r = new Random();
+	private int width_p1, width_p2, height;
 	private int connections = 0;
-
+	private boolean switchFoodto1;
+	private static final int DIM = 32;
 	public enum Direction {
 		UP, DOWN, RIGHT, LEFT, EAT
 	}
@@ -27,6 +31,7 @@ public class Main {
 
 	private Main() {
 		// Wait for client connections
+		switchFoodto1 = false;
 		listenForConnections();
 	}
 
@@ -62,12 +67,14 @@ public class Main {
 			dimension1 = handlers.get(0).getDimension();
 			writer.write(0);
 			writer.write(dimension1.width);
+			width_p1 = dimension1.width;
 			writer.write(dimension1.height);
 			writer.flush();
 
 			writer = writers.get(1);
 			writer.write(dimension1.width);
 			writer.write(dimension2.width);
+			width_p2 = dimension2.width;
 			writer.write(dimension2.height);
 			writer.flush();
 
@@ -93,6 +100,11 @@ public class Main {
 
 		public Dimension getDimension() {
 			return dimension;
+		}
+		
+		private int getFoodCoord (boolean ifx, int size) {
+			if (ifx) return (r.nextInt(size) + DIM / 2) / DIM * DIM;
+			else return (r.nextInt(size) + DIM / 2) / DIM * DIM;
 		}
 
 		@Override
@@ -126,6 +138,8 @@ public class Main {
 							break;
 						case 666:
 							tellAll(Direction.EAT.ordinal());
+							if (switchFoodto1) {tellAll(getFoodCoord (true, width_p1)); tellAll(getFoodCoord (false, height)); switchFoodto1 = false;}
+							else {tellAll(width_p1 + getFoodCoord (true, width_p2));  tellAll(getFoodCoord (false, height)); switchFoodto1 = true;}
 						}
 					}
 				}

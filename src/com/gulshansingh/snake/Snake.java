@@ -96,21 +96,15 @@ public class Snake implements Serializable {
 		SnakeBody next = new SnakeBody(x, y);
 		body.addFirst(next);
 
-		System.out.println(Main.start_x);
-
 		if (y < 0) {
 			next.setVisible(false);
-			System.out.println(next.isVisible());
 		} else if (y > size.height) {
 			next.setVisible(false);
-			System.out.println(next.isVisible());
 		}
 		if (x < Main.start_x) {
 			next.setVisible(false);
-			System.out.println(next.isVisible());
 		} else if (x > Main.start_x + Main.rframe_width) {
 			next.setVisible(false);
-			System.out.println(next.isVisible());
 		}
 
 		this.first = next;

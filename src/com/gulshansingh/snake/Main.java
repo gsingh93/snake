@@ -129,11 +129,10 @@ public class Main {
 		}
 		snake = new Snake(frame);
 		SnakeBody food = newFood();
-
+		new Thread(incomingReader).start();
 		while (true) {
-			new Thread(incomingReader).start();
 			try {
-				Thread.sleep(200);
+				Thread.sleep(400);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

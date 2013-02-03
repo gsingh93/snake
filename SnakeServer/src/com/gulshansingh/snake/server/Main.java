@@ -35,10 +35,7 @@ public class Main {
 		listenForConnections();
 	}
 
-	private int getFoodCoord(boolean ifx, int size) {
-		if (ifx)
-			return (r.nextInt(size) + DIM / 2) / DIM * DIM;
-		else
+	private int getFoodCoord(int size) {
 			return (r.nextInt(size) + DIM / 2) / DIM * DIM;
 	}
 
@@ -66,14 +63,15 @@ public class Main {
 			Dimension dimension2 = handlers.get(1).getDimension();
 
 			int width = dimension1.width + dimension2.width;
-			int height = Math.max(dimension1.height, dimension2.height);
+			int height_m = Math.max(dimension1.height, dimension2.height);
 			tellAll(width);
-			tellAll(height);
+			tellAll(height_m);
 
 			width_p1 = dimension1.width;
 			width_p2 = dimension2.width;
-			int x_food = getFoodCoord(true, width_p1);
-			int y_food = width_p1 + getFoodCoord(true, width_p2);
+			height = dimension1.height;
+			int x_food = getFoodCoord(width_p1);
+			int y_food = getFoodCoord(height);
 
 			PrintWriter writer = writers.get(0);
 			dimension1 = handlers.get(0).getDimension();
@@ -149,8 +147,15 @@ public class Main {
 							break;
 						case 666:
 							tellAll(Direction.EAT.ordinal());
-							if (switchFoodto1) {tellAll(getFoodCoord (true, width_p1)); tellAll(getFoodCoord (false, height)); switchFoodto1 = false;}
-							else {tellAll(width_p1 + getFoodCoord (true, width_p2));  tellAll(getFoodCoord (false, height)); switchFoodto1 = true;}
+							if (switchFoodto1) {
+								tellAll(getFoodCoord(width_p1));
+								tellAll(getFoodCoord(height));
+								switchFoodto1 = false;
+							} else {
+								tellAll(width_p1 + getFoodCoord(width_p2));
+								tellAll(getFoodCoord(height));
+								switchFoodto1 = true;
+							}
 						}
 					}
 				}

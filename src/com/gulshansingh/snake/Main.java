@@ -43,6 +43,7 @@ public class Main {
 	private Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
 	private IncomingReader incomingReader;
 	private static SnakeBody food;
+
 	public static void main(String[] args) {
 		new Main();
 	}
@@ -133,8 +134,8 @@ public class Main {
 		}
 		snake = new Snake(frame);
 
+		new Thread(incomingReader).start();
 		while (true) {
-			new Thread(incomingReader).start();
 			try {
 				Thread.sleep(200);
 			} catch (InterruptedException e) {
@@ -162,9 +163,11 @@ public class Main {
 			System.exit(1);
 		}
 	}
-	
+
 	public static void makeNewFood(int food_x, int food_y) {
+		System.out.println("Making some food...");
 		food = new SnakeBody(food_x, food_y);
+		System.out.println(food_x + " " + food_y);
 		food.setLocation(food_x, food_y);
 	}
 
@@ -199,6 +202,7 @@ public class Main {
 			int dir = 0;
 			try {
 				while ((dir = reader.read()) != -1) {
+					System.out.println(dir);
 					Direction direction = Direction.values()[dir];
 					// Read key presses
 					switch (direction) {
@@ -215,10 +219,16 @@ public class Main {
 						snake.setDirection(Direction.DOWN);
 						break;
 					case EAT:
+						System.out.print("Eating");
 						snake.appendSnakeBody();
+						System.out.print("Append");
 						int food_x = reader.read();
+						System.out.print(food_x);
 						int food_y = reader.read();
+						System.out.print(food_y);
+						// reader.reset();
 						Main.makeNewFood(food_x, food_y);
+						System.out.print("New food!");
 						break;
 					}
 				}

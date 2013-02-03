@@ -139,7 +139,6 @@ public class Main {
 			}
 			snake.update();
 			if (snake.collision(food)) {
-				System.out.println("++++++++++++++++COLLISION+++++++++++++");
 				food.dispose();
 				food = newFood();
 				sendToControllerStatus(666);

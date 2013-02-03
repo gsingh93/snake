@@ -139,6 +139,7 @@ public class Main {
 			}
 			snake.update();
 			if (snake.collision(food)) {
+				System.out.println("++++++++++++++++COLLISION+++++++++++++");
 				food.dispose();
 				food = newFood();
 				sendToControllerStatus(666);
@@ -173,16 +174,12 @@ public class Main {
 
 	public void sendToControllerStatus(int state) {
 		try {
-			// System.out.println("X: " + snake.getXCoord());
-			// System.out.println("S_X: " + start_x);
-			// System.out.println("F_W: " + rframe_width);
 			if (snake.getXCoord() >= start_x
 					&& snake.getXCoord() <= start_x + rframe_width)
 				if (snake.getYCoord() >= 0
 						&& snake.getYCoord() <= rframe_height) {
 					writer.write(state);
 					writer.flush();
-					System.out.println("Sent");
 				}
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -206,7 +203,6 @@ public class Main {
 			int dir = 0;
 			try {
 				while ((dir = reader.read()) != -1) {
-					System.out.println(dir);
 					Direction direction = Direction.values()[dir];
 					// Read key presses
 					switch (direction) {

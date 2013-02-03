@@ -32,12 +32,8 @@ public class Snake implements Serializable {
 
 		for (int i = 0; i < 10; i++) {
 			body.add(new SnakeBody(STARTING_X + i * SnakeBody.DIM, STARTING_Y));
-			// System.out.println(STARTING_X);
-			// System.out.println(STARTING_X + i * SnakeBody.DIM);
-			// System.out.println(Main.start_x);
 			if (STARTING_X + i * SnakeBody.DIM < Main.start_x) {
 				body.get(i).setVisible(false);
-				// System.out.println(body.get(i).isVisible());
 			} else if (STARTING_X + i * SnakeBody.DIM > Main.start_x
 					+ Main.rframe_width) {
 				body.get(i).setVisible(false);
@@ -90,12 +86,12 @@ public class Snake implements Serializable {
 			x = 0;
 		}
 
-		System.out.println(x);
-		System.out.println(y);
-		System.out.println("");
-		System.out.println(Main.start_x);
-		System.out.println(Main.rframe_width);
-		System.out.println("");
+		// System.out.println(x);
+		// System.out.println(y);
+		// System.out.println("");
+		// System.out.println(Main.start_x);
+		// System.out.println(Main.rframe_width);
+		// System.out.println("");
 
 		SnakeBody next = new SnakeBody(x, y);
 		body.addFirst(next);

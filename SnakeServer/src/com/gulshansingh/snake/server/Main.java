@@ -54,9 +54,7 @@ public class Main {
 			Dimension dimension2 = handlers.get(1).getDimension();
 
 			int width = dimension1.width + dimension2.width;
-			width = (width + 32 / 2) / 32 * 32;
 			int height = Math.max(dimension1.height, dimension2.height);
-			height = (height + 32 / 2) / 32 * 32;
 			tellAll(width);
 			tellAll(height);
 
@@ -106,6 +104,8 @@ public class Main {
 					if (!sizeReceived) {
 						int width = message;
 						int height = reader.read();
+						width = (width + 32 / 2) / 32 * 32;
+						height = (height + 32 / 2) / 32 * 32;
 						dimension = new Dimension(width, height);
 						sizeReceived = true;
 					} else {

@@ -185,7 +185,6 @@ public class Main {
 		try {
 			writer.write(size.width);
 			writer.write(size.height);
-			writer.write(Direction.EAT.ordinal());
 			writer.flush();
 		} catch (Exception ex) {
 			ex.printStackTrace();

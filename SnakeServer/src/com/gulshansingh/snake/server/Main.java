@@ -70,6 +70,8 @@ public class Main {
 			tellAll(width);
 			tellAll(height);
 
+			width_p1 = dimension1.width;
+			width_p2 = dimension2.width;
 			int x_food = getFoodCoord(true, width_p1);
 			int y_food = width_p1 + getFoodCoord(true, width_p2);
 
@@ -77,7 +79,6 @@ public class Main {
 			dimension1 = handlers.get(0).getDimension();
 			writer.write(0);
 			writer.write(dimension1.width);
-			width_p1 = dimension1.width;
 			writer.write(dimension1.height);
 			writer.write(x_food);
 			writer.write(y_food);
@@ -86,7 +87,6 @@ public class Main {
 			writer = writers.get(1);
 			writer.write(dimension1.width);
 			writer.write(dimension2.width);
-			width_p2 = dimension2.width;
 			writer.write(dimension2.height);
 			writer.write(x_food);
 			writer.write(y_food);

@@ -117,6 +117,7 @@ public class Main {
 			numConnections++;
 		}
 
+		SnakeBody.setJFrame(frame);
 		incomingReader = new IncomingReader();
 		try {
 			vframe_width = reader.read();
